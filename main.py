@@ -6,7 +6,8 @@ def show_menu(): # 메뉴 출력
     print("3. 프롬프트 수정_U")
     print("4. 프롬프트 삭제_D")
     print("5. 프롬프트 상세 보기")
-    print("6. 종료")
+    print("6. 카테고리별 조회")
+    print("7. 종료")
 
 def get_non_empty_input(prompt): # 입력값 누락 방지
     while True:
@@ -55,6 +56,35 @@ def load_default_prompts():
     ]
 
 # 기능 함수⚙️
+def filter_by_category(prompts):  # 카테고리별 조회
+    preset = ["텍스트 생성", "멀티모달 생성", "기타"]
+
+    print("\n--- 카테고리 선택 ---")
+    for i, c in enumerate(preset, start=1):
+        print(f"{i}. {c}")
+
+    try:
+        idx = int(input("조회할 카테고리 번호: ")) - 1
+    except ValueError:
+        print("숫자를 입력해주세요.")
+        return
+
+    if not (0 <= idx < len(preset)):
+        print("없는 번호입니다.")
+        return
+
+    selected = preset[idx]
+    result = [p for p in prompts if p['category'] == selected]
+
+    print(f"\n--- [{selected}] 카테고리 목록 ---")
+    if not result:
+        print("해당 카테고리에 프롬프트가 없습니다.")  
+        return
+
+    for i, p in enumerate(result, start=1):
+        fav = "⭐" if p.get("favorite") else " "
+        print(f"{i}. {p.get('title','제목없음')} | {fav}")
+
 def add_prompt(prompts): # 프롬프트 추가
     title = get_non_empty_input("제목: ")
     content = get_non_empty_input("내용: ")
@@ -142,11 +172,14 @@ def main():
             show_prompt_detail(prompts)
 
         elif choice == "6":
+            filter_by_category(prompts)
+
+        elif choice == "7":
             print("프로그램을 종료합니다.")
             break
 
         else:
-            print("잘못된 메뉴 번호입니다. 1~6 중에서 다시 선택해주세요.")
+            print("잘못된 메뉴 번호입니다. 1~7 중에서 다시 선택해주세요.")
 
 if __name__ == "__main__":
     main()
