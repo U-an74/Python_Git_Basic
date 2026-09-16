@@ -7,8 +7,10 @@ def show_menu(): # 메뉴 출력
     print("4. 프롬프트 삭제_D")
     print("5. 프롬프트 상세 보기")
     print("6. 카테고리별 조회")
-    print("7. 프롬프트 검색") 
-    print("8. 종료")
+    print("7. 프롬프트 검색")
+    print("8. 즐겨찾기 추가/해제") 
+    print("9. 즐겨찾기 목록")    
+    print("0. 종료")
 
 def get_non_empty_input(prompt): # 입력값 누락 방지
     while True:
@@ -57,6 +59,32 @@ def load_default_prompts():
     ]
 
 # 기능 함수⚙️
+def toggle_favorite(prompts):  # 즐겨찾기 추가/해제
+    show_prompt_list(prompts) 
+    try:
+        idx = int(input("즐겨찾기 추가/해제할 번호: ")) - 1
+    except ValueError:
+        print("숫자를 입력해주세요.")
+        return
+
+    if 0 <= idx < len(prompts):
+        prompts[idx]['favorite'] = not prompts[idx]['favorite'] 
+        status = "⭐ 추가" if prompts[idx]['favorite'] else "해제"
+        print(f"'{prompts[idx]['title']}' 즐겨찾기가 {status}되었습니다.")
+    else:
+        print("없는 번호입니다.")
+
+def show_favorites(prompts):  # 즐겨찾기 목록
+    result = [p for p in prompts if p.get('favorite')]
+
+    print("\n--- ⭐ 즐겨찾기 목록 ---")
+    if not result:
+        print("즐겨찾기된 프롬프트가 없습니다.")
+        return
+
+    for i, p in enumerate(result, start=1):
+        print(f"{i}. {p.get('category','미정')} | {p.get('title','제목없음')}")
+
 def search_prompt(prompts):  # 프롬프트 검색
     keyword = get_non_empty_input("검색할 키워드: ")
     result = [
@@ -193,8 +221,14 @@ def main():
             
         elif choice == "7":              
             search_prompt(prompts)    
+          
+        elif choice == "8":                 
+            toggle_favorite(prompts)
+                    
+        elif choice == "9":                  
+            show_favorites(prompts)          
 
-        elif choice == "8":
+        elif choice == "0":
             print("프로그램을 종료합니다.")
             break
 
