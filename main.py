@@ -7,7 +7,8 @@ def show_menu(): # 메뉴 출력
     print("4. 프롬프트 삭제_D")
     print("5. 프롬프트 상세 보기")
     print("6. 카테고리별 조회")
-    print("7. 종료")
+    print("7. 프롬프트 검색") 
+    print("8. 종료")
 
 def get_non_empty_input(prompt): # 입력값 누락 방지
     while True:
@@ -56,6 +57,22 @@ def load_default_prompts():
     ]
 
 # 기능 함수⚙️
+def search_prompt(prompts):  # 프롬프트 검색
+    keyword = get_non_empty_input("검색할 키워드: ")
+    result = [
+        p for p in prompts
+        if keyword in p.get('title', '') or keyword in p.get('content', '')
+    ]
+
+    print(f"\n--- '{keyword}' 검색 결과 ---")
+    if not result:
+        print("검색 결과가 없습니다.")
+        return
+
+    for i, p in enumerate(result, start=1):
+        fav = "⭐" if p.get("favorite") else " "
+        print(f"{i}. {p.get('category','미정')} | {p.get('title','제목없음')} | {fav}")
+
 def filter_by_category(prompts):  # 카테고리별 조회
     preset = ["텍스트 생성", "멀티모달 생성", "기타"]
 
@@ -121,7 +138,7 @@ def show_prompt_detail(prompts): # 프롬프트 상세
         print(f"내용: {p['content']}")
     else:
         print("없는 번호입니다.")
-        
+
 def update_prompt(prompts): # 프롬프트 수정
     try:
         idx = int(input("수정할 번호: ")) - 1
@@ -173,8 +190,11 @@ def main():
 
         elif choice == "6":
             filter_by_category(prompts)
+            
+        elif choice == "7":              
+            search_prompt(prompts)    
 
-        elif choice == "7":
+        elif choice == "8":
             print("프로그램을 종료합니다.")
             break
 
