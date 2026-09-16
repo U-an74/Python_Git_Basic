@@ -42,6 +42,9 @@
 
 ## ☑️ 참고
 
+### 📄 보고서
+[프로그램 설계 및 실행 기록](https://app.notion.com/p/Basic-of-Python-Git-3d1631db7fe0807892a7e9ca0668bf3d)
+
 ### 🏗️ 최종 코드 함수 구조도
 
 ```
